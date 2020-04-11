@@ -63,10 +63,15 @@ class UI {
         choice == "yes"
       ) {
         ET.parentElement.parentElement.remove();
+        M.toast({ html: "Succefully Deleted" });
       } else {
-        alert("You says NO");
+        M.toast({ html: "Book has not been delected" });
       }
     }
+  }
+
+  static showAlert(message, className) {
+    //const div = document.createElement("div");
   }
 
   static clearFields() {
