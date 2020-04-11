@@ -12,7 +12,7 @@ class Book {
 
 class UI {
   static displayBooks() {
-    const StoreBooks = [
+    /*const StoreBooks = [
       {
         title: "Harry potter",
         author: "J.K.Rowing",
@@ -25,7 +25,9 @@ class UI {
       },
     ];
 
-    const books = StoreBooks;
+    */
+
+    const books = Store.getBooks();
 
     books.forEach((book) => UI.addBookToList(book));
 
@@ -64,6 +66,9 @@ class UI {
       ) {
         ET.parentElement.parentElement.remove();
         M.toast({ html: "Succefully Deleted" });
+        Store.removeBook(ET.parentElement.previousElementSibling.textContent);
+
+        //console.log(ET.parentElement.previousElementSibling.textContent);
       } else {
         M.toast({ html: "Book has not been delected" });
       }
@@ -82,6 +87,36 @@ class UI {
 }
 
 // Store Class : Handles Storage
+class Store {
+  static getBooks() {
+    let books;
+    if (localStorage.getItem("books") === null) {
+      books = [];
+    } else {
+      books = JSON.parse(localStorage.getItem("books"));
+    }
+
+    return books;
+  }
+
+  static addBooks(book) {
+    const books = Store.getBooks();
+
+    books.push(book);
+    localStorage.setItem("books", JSON.stringify(books));
+  }
+
+  static removeBook(isbn) {
+    const books = Store.getBooks();
+
+    books.forEach((book, index) => {
+      if (book.ISBN === isbn) {
+        books.splice(index, 1);
+        localStorage.setItem("books", JSON.stringify(books));
+      }
+    });
+  }
+}
 
 // Event : Display Books
 
@@ -118,12 +153,23 @@ document
       //add boook to UI
       UI.addBookToList(book);
 
+      //add book to store
+      Store.addBooks(book);
+
       //clear field
       UI.clearFields();
+      M.toast({ html: "Succefully added the Book" });
     }
   });
 
-//Event : Remove a Book
+//Event : Remove a Book UI
+
+//document
+//.getElementById("book-list")
+//.addEventListener("click", function (EventDeel) {
+//console.log(EventDeel.target.parentElement.previousElementSibling.textContent);
+
+//});
 
 document
   .getElementById("book-list")
